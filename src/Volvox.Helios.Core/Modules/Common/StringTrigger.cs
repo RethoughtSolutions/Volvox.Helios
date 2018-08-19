@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Volvox.Helios.Core.Modules.DiscordFacing;
 
 namespace Volvox.Helios.Core.Modules.Common
@@ -19,6 +18,7 @@ namespace Volvox.Helios.Core.Modules.Common
                 return true;
             }
 
-        return false;        }
+            return false;
+        }
     }
 }

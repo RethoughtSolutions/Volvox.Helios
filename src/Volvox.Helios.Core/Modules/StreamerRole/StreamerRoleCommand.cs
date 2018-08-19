@@ -11,28 +11,45 @@ using Volvox.Helios.Core.Utilities;
 namespace Volvox.Helios.Core.Modules.StreamerRole
 {
     /// <summary>
-    /// Assign a user the streaming role.
+    ///     Assign a user the streaming role.
     /// </summary>
-    public class StreamerRoleModule : IModule
+    public class StreamerRoleCommand : ICommand
     {
-        private readonly DiscordSocketClient discordSocketClient;
         private readonly IDiscordSettings discordSettings;
-        private readonly ILogger<StreamerRoleModule> logger;
+        private readonly DiscordSocketClient discordSocketClient;
+        private readonly ILogger<StreamerRoleCommand> logger;
 
         /// <summary>
-        /// Assign a user the streaming role.
+        ///     Assign a user the streaming role.
         /// </summary>
         /// <param name="discordSettings">Settings used to connect to Discord.</param>
         /// <param name="logger">Logger.</param>
-        public StreamerRoleModule(DiscordSocketClient discordSocketClient, IDiscordSettings discordSettings, ILogger<StreamerRoleModule> logger)
+        public StreamerRoleCommand(DiscordSocketClient discordSocketClient, IDiscordSettings discordSettings,
+            ILogger<StreamerRoleCommand> logger)
         {
             this.discordSocketClient = discordSocketClient;
             this.discordSettings = discordSettings;
             this.logger = logger;
         }
-        
+
+        public Task InvokeAsync(DiscordFacingContext discordFacingContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Enable()
+        {
+            // Subscribe to the GuildMemberUpdated event.
+            discordSocketClient.GuildMemberUpdated += OnDiscordSocketClientOnGuildMemberUpdated;
+        }
+
+        public void Disable()
+        {
+            discordSocketClient.GuildMemberUpdated -= OnDiscordSocketClientOnGuildMemberUpdated;
+        }
+
         /// <summary>
-        /// Add the specified used to the specified streaming role.
+        ///     Add the specified used to the specified streaming role.
         /// </summary>
         /// <param name="guildUser">User to add to role.</param>
         /// <param name="streamingRole">Role to add the user to.</param>
@@ -42,9 +59,9 @@ namespace Volvox.Helios.Core.Modules.StreamerRole
 
             logger.LogDebug($"StreamingRole Module: Adding {guildUser.Username}");
         }
-        
+
         /// <summary>
-        /// Remove the specified used to the specified streaming role.
+        ///     Remove the specified used to the specified streaming role.
         /// </summary>
         /// <param name="guildUser">User to add to role.</param>
         /// <param name="streamingRole">Role to add the user to.</param>
@@ -53,12 +70,6 @@ namespace Volvox.Helios.Core.Modules.StreamerRole
             await guildUser.RemoveRoleAsync(streamingRole);
 
             logger.LogDebug($"StreamingRole Module: Removing {guildUser.Username}");
-        }
-
-        public void Enable()
-        {
-            // Subscribe to the GuildMemberUpdated event.
-            discordSocketClient.GuildMemberUpdated += OnDiscordSocketClientOnGuildMemberUpdated;
         }
 
         private async Task OnDiscordSocketClientOnGuildMemberUpdated(SocketGuildUser user, SocketGuildUser guildUser)
@@ -77,16 +88,6 @@ namespace Volvox.Helios.Core.Modules.StreamerRole
             {
                 await RemoveUserFromStreamingRole(guildUser, streamingRole);
             }
-        }
-
-        public void Disable()
-        {
-            discordSocketClient.GuildMemberUpdated -= OnDiscordSocketClientOnGuildMemberUpdated;
-        }
-
-        public Task InvokeAsync(DiscordFacingContext discordFacingContext)
-        {
-            throw new NotImplementedException();
         }
     }
 }

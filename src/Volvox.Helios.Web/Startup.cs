@@ -108,26 +108,38 @@ namespace Volvox.Helios.Web
 
             // DiscordSocketClientFactory
             services.AddSingleton<DiscordSocketClientFactory>();
-            services.AddSingleton<DiscordSocketClient>(provider => provider.GetService<DiscordSocketClientFactory>().Create());
+            services.AddSingleton(provider => provider.GetService<DiscordSocketClientFactory>().Create());
 
             // Modules
-            //services.AddSingleton<IModule, StreamerRoleModule>();
+            //services.AddSingleton<ICommand, StreamerRoleCommand>();
             services.AddSingleton<IModule, StreamAnnouncerModule>();
 
             // DiscordFacing
-            // TODO Replace null with DiscordSocketClient
-            services.AddSingleton<IModule>(provider => 
-                new MessageReceiverModuleDecorator(provider.GetService<DiscordSocketClient>(),
-                    new TriggerableModuleDecorator(
-                        new StringTrigger("!"),
-                        new DiscordFacingManager(
-                            new List<TriggerableModuleDecorator>
-                            {
-                                new TriggerableModuleDecorator(new StringTrigger("help"), new HelpModule())
-                            }))));
+            var commands = new TriggerableCommandDecorator(
+                new StringTrigger("!"),
+                new DiscordFacingManager(
+                    new List<TriggerableCommandDecorator>
+                    {
+                        new TriggerableCommandDecorator(new StringTrigger("help"), new HelpCommand())
+                    }));
+
+
+            services.AddSingleton<ICommand>(provider =>
+            {
+                var discordSocketClient = provider.GetService<DiscordSocketClient>();
+                discordSocketClient.MessageReceived += async socketMessage =>
+                {
+                    if (socketMessage is SocketUserMessage socketUserMessage)
+                        await commands.InvokeAsync(new DiscordFacingContext(socketUserMessage, discordSocketClient))
+                            .ConfigureAwait(false);
+                };
+
+                return commands;
+            });
 
             // All Modules
             services.AddSingleton<IList<IModule>>(s => s.GetServices<IModule>().ToList());
+            services.AddSingleton<IList<ICommand>>(s => s.GetServices<ICommand>().ToList());
             services.AddSingleton<IList<ITrigger>>(s => s.GetServices<ITrigger>().ToList());
 
             // Http Clients

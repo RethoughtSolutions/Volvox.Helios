@@ -9,27 +9,17 @@ namespace Volvox.Helios.Core.Modules.Common
 
         public TriggerableModuleDecorator(ITrigger trigger, IModule module)
         {
-            this.Trigger = trigger;
+            Trigger = trigger;
             this.module = module;
         }
 
         public ITrigger Trigger { get; }
 
-        public void Enable()
-        {
-            module.Enable();
-        }
-
-        public void Disable()
-        {
-            this.module.Disable();
-        }
-
         public async Task InvokeAsync(DiscordFacingContext discordFacingContext)
         {
-            if (this.Trigger.Valid(discordFacingContext))
+            if (Trigger.Valid(discordFacingContext))
             {
-                await this.module.InvokeAsync(discordFacingContext);
+                await module.InvokeAsync(discordFacingContext);
             }
         }
     }

@@ -6,46 +6,37 @@ using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
 using Volvox.Helios.Core.Bot.Connector;
-using Volvox.Helios.Core.Modules.Common;
 using Volvox.Helios.Core.Utilities;
 
 namespace Volvox.Helios.Core.Bot
 {
-    public class DiscordSocketClientFactory
-    {
-        public DiscordSocketClient Create()
-        {
-            // TODO: Convert logging to module
-            return new DiscordSocketClient(new DiscordSocketConfig()
-            {
-                LogLevel = LogSeverity.Verbose
-            });
-        }
-    }
     /// <summary>
-    /// Discord bot.
+    ///     Discord bot.
     /// </summary>
     public class Bot : IBot
     {
         /// <summary>
-        /// Discord bot.
+        ///     Client for the bot.
         /// </summary>
-        /// <param name="modules">List of modules for the bot.</param>
+        private readonly DiscordSocketClient discordSocketClient;
+
+        /// <summary>
+        ///     Discord bot.
+        /// </summary>
         /// <param name="settings">Settings used to connect to Discord.</param>
         /// <param name="logger">Application logger.</param>
-        public Bot(DiscordSocketClient discordSocketClient, IList<IModule> modules, IDiscordSettings settings, ILogger<Bot> logger)
+        public Bot(DiscordSocketClient discordSocketClient, IDiscordSettings settings, ILogger<Bot> logger)
         {
             this.discordSocketClient = discordSocketClient;
-            Modules = modules;
             Logger = logger;
 
-            // TODO: Convert logging to module
+            // TODO: Convert logging to command
             discordSocketClient.Log += Log;
             Connector = new BotConnector(settings, discordSocketClient);
         }
 
         /// <summary>
-        /// Start the bot.
+        ///     Start the bot.
         /// </summary>
         public async Task Start()
         {
@@ -55,7 +46,7 @@ namespace Volvox.Helios.Core.Bot
         }
 
         /// <summary>
-        /// Stop the bot.
+        ///     Stop the bot.
         /// </summary>
         public async Task Stop()
         {
@@ -68,7 +59,7 @@ namespace Volvox.Helios.Core.Bot
         }
 
         /// <summary>
-        /// Log an event.
+        ///     Log an event.
         /// </summary>
         /// <param name="message">Message to log.</param>
         public Task Log(LogMessage message)
@@ -99,24 +90,13 @@ namespace Volvox.Helios.Core.Bot
             return Task.CompletedTask;
         }
 
-
         /// <summary>
-        /// Client for the bot.
-        /// </summary>
-        private readonly DiscordSocketClient discordSocketClient;
-
-        /// <summary>
-        /// Connector that the bot uses to connect to Discord.
+        ///     Connector that the bot uses to connect to Discord.
         /// </summary>
         public IBotConnector Connector { get; }
 
         /// <summary>
-        /// List of modules for the bot.
-        /// </summary>
-        public IList<IModule> Modules { get; }
-
-        /// <summary>
-        /// Application logger.
+        ///     Application logger.
         /// </summary>
         public ILogger<Bot> Logger { get; }
     }
