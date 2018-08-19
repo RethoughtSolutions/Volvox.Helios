@@ -130,8 +130,7 @@ namespace Volvox.Helios.Web
                 discordSocketClient.MessageReceived += async socketMessage =>
                 {
                     if (socketMessage is SocketUserMessage socketUserMessage)
-                        await commands.InvokeAsync(new DiscordFacingContext(socketUserMessage, discordSocketClient))
-                            .ConfigureAwait(false);
+                        await commands.InvokeAsync(new DiscordFacingContext(socketUserMessage, discordSocketClient));
                 };
 
                 return commands;

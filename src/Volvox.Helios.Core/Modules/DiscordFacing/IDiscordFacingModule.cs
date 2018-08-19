@@ -5,7 +5,7 @@ namespace Volvox.Helios.Core.Modules.DiscordFacing
     public interface IDiscordFacingModule
     {
         /// <summary>
-        ///     Not to be confused with IModule.Execute. Implement this method with your command execution.
+        ///     Not to be confused with ICommand.Execute. Implement this method with your command execution.
         /// </summary>
         /// <param name="context">Supplied by DiscordFacingManager</param>
         Task ExecuteAsync(DiscordFacingContext context);

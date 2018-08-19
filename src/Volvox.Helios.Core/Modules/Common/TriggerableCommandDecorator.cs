@@ -3,14 +3,14 @@ using Volvox.Helios.Core.Modules.DiscordFacing;
 
 namespace Volvox.Helios.Core.Modules.Common
 {
-    public class TriggerableModuleDecorator : IModule
+    public class TriggerableCommandDecorator : ICommand
     {
-        private readonly IModule module;
+        private readonly ICommand command;
 
-        public TriggerableModuleDecorator(ITrigger trigger, IModule module)
+        public TriggerableCommandDecorator(ITrigger trigger, ICommand command)
         {
             Trigger = trigger;
-            this.module = module;
+            this.command = command;
         }
 
         public ITrigger Trigger { get; }
@@ -19,7 +19,7 @@ namespace Volvox.Helios.Core.Modules.Common
         {
             if (Trigger.Valid(discordFacingContext))
             {
-                await module.InvokeAsync(discordFacingContext);
+                await command.InvokeAsync(discordFacingContext);
             }
         }
     }

@@ -1,22 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
-using Volvox.Helios.Core.Modules.Common;
-using Volvox.Helios.Core.Modules.DiscordFacing;
 using Volvox.Helios.Domain.ModuleSettings;
 using Volvox.Helios.Service.ModuleSettings;
 
 namespace Volvox.Helios.Core.Modules.StreamAnnouncer
 {
-    public interface IModule
-    {
-
-    }
-
     /// <summary>
     ///     Announce the user to a specified channel when the user starts streaming.
     /// </summary>

@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord;
 using Volvox.Helios.Core.Modules.Common;
 
 namespace Volvox.Helios.Core.Modules.DiscordFacing
 {
-    public class DiscordFacingManager : IModule
+    public class DiscordFacingManager : ICommand
     {
-        private readonly IList<TriggerableModuleDecorator> modules;
+        private readonly IList<TriggerableCommandDecorator> modules;
 
-        public DiscordFacingManager(IList<TriggerableModuleDecorator> modules)
+        public DiscordFacingManager(IList<TriggerableCommandDecorator> modules)
         {
             this.modules = modules;
         }

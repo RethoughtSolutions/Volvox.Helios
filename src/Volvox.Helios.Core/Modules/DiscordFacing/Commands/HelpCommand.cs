@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volvox.Helios.Core.Modules.Common;
 
 namespace Volvox.Helios.Core.Modules.DiscordFacing.Commands
